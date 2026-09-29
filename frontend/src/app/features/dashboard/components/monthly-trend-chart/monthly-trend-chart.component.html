@@ -1,0 +1,23 @@
+<div class="chart-container" *ngIf="chartData.length > 0">
+  <ngx-charts-bar-vertical-2d
+    [results]="chartData"
+    [scheme]="colorScheme"
+    [legend]="true"
+    [legendTitle]="''"
+    [legendPosition]="legendPosition"
+    [xAxis]="true"
+    [yAxis]="true"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    [barPadding]="4"
+    [groupPadding]="16"
+    [roundEdges]="true"
+    [tooltipDisabled]="false"
+    [animations]="true"
+    [noBarWhenZero]="true">
+  </ngx-charts-bar-vertical-2d>
+</div>
+
+<div class="empty-chart" *ngIf="chartData.length === 0">
+  <p>No trend data available.</p>
+</div>

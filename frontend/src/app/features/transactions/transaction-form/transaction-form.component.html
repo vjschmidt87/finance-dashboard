@@ -1,0 +1,124 @@
+<div class="form-container">
+  <div class="form-card">
+    <h1>{{ isEditing ? 'Edit Transaction' : 'New Transaction' }}</h1>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" formControlName="type">
+          <option *ngFor="let t of transactionTypes" [value]="t.value">
+            {{ t.label }}
+          </option>
+        </select>
+        <div
+          class="field-error"
+          *ngIf="transactionForm.get('type')?.touched && transactionForm.get('type')?.hasError('required')"
+        >
+          Type is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input
+          id="amount"
+          type="number"
+          formControlName="amount"
+          placeholder="0.00"
+          step="0.01"
+          min="0.01"
+        />
+        <div
+          class="field-error"
+          *ngIf="transactionForm.get('amount')?.touched && transactionForm.get('amount')?.hasError('required')"
+        >
+          Amount is required.
+        </div>
+        <div
+          class="field-error"
+          *ngIf="transactionForm.get('amount')?.touched && transactionForm.get('amount')?.hasError('min')"
+        >
+          Amount must be greater than zero.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input
+          id="description"
+          type="text"
+          formControlName="description"
+          placeholder="Enter description"
+        />
+        <div
+          class="field-error"
+          *ngIf="transactionForm.get('description')?.touched && transactionForm.get('description')?.hasError('required')"
+        >
+          Description is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input
+          id="date"
+          type="date"
+          formControlName="date"
+        />
+        <div
+          class="field-error"
+          *ngIf="transactionForm.get('date')?.touched && transactionForm.get('date')?.hasError('required')"
+        >
+          Date is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="accountId">Account</label>
+        <select id="accountId" formControlName="accountId">
+          <option [ngValue]="null" disabled>Select an account</option>
+          <option *ngFor="let account of accounts" [ngValue]="account.id">
+            {{ account.name }}
+          </option>
+        </select>
+        <div
+          class="field-error"
+          *ngIf="transactionForm.get('accountId')?.touched && transactionForm.get('accountId')?.hasError('required')"
+        >
+          Account is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="categoryId">Category</label>
+        <select id="categoryId" formControlName="categoryId">
+          <option [ngValue]="null" disabled>Select a category</option>
+          <option *ngFor="let category of filteredCategories" [ngValue]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+        <div
+          class="field-error"
+          *ngIf="transactionForm.get('categoryId')?.touched && transactionForm.get('categoryId')?.hasError('required')"
+        >
+          Category is required.
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+        >
+          {{ isLoading ? 'Saving...' : (isEditing ? 'Update' : 'Create') }}
+        </button>
+        <a routerLink="/transactions" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="stat-card" [style.border-left-color]="color">
+  <div class="stat-card-content">
+    <span class="stat-title">{{ title }}</span>
+    <div class="stat-value-row">
+      <span class="stat-value">
+        <span class="stat-prefix" *ngIf="prefix">{{ prefix }}</span>{{ formattedValue }}<span class="stat-suffix" *ngIf="suffix">{{ suffix }}</span>
+      </span>
+      <span class="stat-trend" [ngClass]="{
+        'trend-up': trend === 'up',
+        'trend-down': trend === 'down',
+        'trend-neutral': trend === 'neutral'
+      }">
+        <svg *ngIf="trend === 'up'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+        <svg *ngIf="trend === 'down'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        <svg *ngIf="trend === 'neutral'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </span>
+    </div>
+  </div>
+</div>

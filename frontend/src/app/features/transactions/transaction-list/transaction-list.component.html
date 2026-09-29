@@ -1,0 +1,155 @@
+<div class="transaction-list-container">
+  <div class="page-header">
+    <h1>Transactions</h1>
+    <a routerLink="/transactions/new" class="btn btn-primary">Add Transaction</a>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label for="dateFrom">From</label>
+      <input
+        id="dateFrom"
+        type="date"
+        [ngModel]="dateFrom"
+        (ngModelChange)="onDateFromChange($event)"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label for="dateTo">To</label>
+      <input
+        id="dateTo"
+        type="date"
+        [ngModel]="dateTo"
+        (ngModelChange)="onDateToChange($event)"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label for="accountFilter">Account</label>
+      <select
+        id="accountFilter"
+        [ngModel]="selectedAccountId"
+        (ngModelChange)="onAccountChange($event)"
+      >
+        <option value="">All Accounts</option>
+        <option *ngFor="let account of accounts" [value]="account.id">
+          {{ account.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="categoryFilter">Category</label>
+      <select
+        id="categoryFilter"
+        [ngModel]="selectedCategoryId"
+        (ngModelChange)="onCategoryChange($event)"
+      >
+        <option value="">All Categories</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading transactions...</p>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <div *ngIf="transactions.length === 0" class="empty-state">
+      <p>No transactions found.</p>
+      <a routerLink="/transactions/new" class="btn btn-primary">Create your first transaction</a>
+    </div>
+
+    <div *ngIf="transactions.length > 0" class="table-wrapper">
+      <table class="transactions-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Account</th>
+            <th class="text-right">Amount</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions; trackBy: trackByTransaction">
+            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>{{ transaction.categoryName }}</td>
+            <td>{{ transaction.accountName }}</td>
+            <td
+              class="text-right amount"
+              [ngClass]="{
+                'amount-income': transaction.type === 'INCOME',
+                'amount-expense': transaction.type === 'EXPENSE',
+                'amount-transfer': transaction.type === 'TRANSFER'
+              }"
+            >
+              <span *ngIf="transaction.type === 'INCOME'">+</span>
+              <span *ngIf="transaction.type === 'EXPENSE'">-</span>
+              {{ transaction.amount | number:'1.2-2' }}
+            </td>
+            <td class="text-center actions">
+              <a
+                [routerLink]="['/transactions', transaction.id, 'edit']"
+                class="btn-action btn-edit"
+                title="Edit"
+              >
+                Edit
+              </a>
+              <button
+                class="btn-action btn-delete"
+                title="Delete"
+                (click)="deleteTransaction(transaction.id, $event)"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button
+          class="btn-page"
+          [disabled]="currentPage === 0"
+          (click)="goToPage(currentPage - 1)"
+        >
+          Previous
+        </button>
+
+        <ng-container *ngFor="let p of [].constructor(totalPages); let i = index">
+          <button
+            class="btn-page"
+            [class.active]="i === currentPage"
+            (click)="goToPage(i)"
+          >
+            {{ i + 1 }}
+          </button>
+        </ng-container>
+
+        <button
+          class="btn-page"
+          [disabled]="currentPage === totalPages - 1"
+          (click)="goToPage(currentPage + 1)"
+        >
+          Next
+        </button>
+      </div>
+
+      <div class="pagination-info">
+        Showing {{ transactions.length }} of {{ totalElements }} transactions
+      </div>
+    </div>
+  </ng-container>
+</div>

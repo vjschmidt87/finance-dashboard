@@ -1,0 +1,78 @@
+@use '../../../../../styles/variables' as v;
+@use '../../../../../styles/mixins' as m;
+
+.stat-card {
+  background: v.$bg-surface;
+  border-radius: v.$radius-md;
+  box-shadow: v.$shadow-sm;
+  padding: 20px 24px;
+  border-left: 4px solid v.$primary;
+  transition: box-shadow v.$transition-base, transform v.$transition-base;
+
+  &:hover {
+    box-shadow: v.$shadow-md;
+    transform: translateY(-2px);
+  }
+}
+
+.stat-card-content {
+  @include m.flex-column;
+  gap: 8px;
+}
+
+.stat-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: v.$text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.stat-value-row {
+  @include m.flex-between;
+  gap: 8px;
+}
+
+.stat-value {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: v.$text-primary;
+  line-height: 1.2;
+}
+
+.stat-prefix {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-right: 2px;
+  opacity: 0.8;
+}
+
+.stat-suffix {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-left: 2px;
+  opacity: 0.8;
+}
+
+.stat-trend {
+  @include m.flex-center;
+  width: 28px;
+  height: 28px;
+  border-radius: v.$radius-round;
+  flex-shrink: 0;
+
+  &.trend-up {
+    color: v.$success;
+    background: rgba(v.$success, 0.1);
+  }
+
+  &.trend-down {
+    color: v.$danger;
+    background: rgba(v.$danger, 0.1);
+  }
+
+  &.trend-neutral {
+    color: v.$text-secondary;
+    background: rgba(v.$text-secondary, 0.1);
+  }
+}

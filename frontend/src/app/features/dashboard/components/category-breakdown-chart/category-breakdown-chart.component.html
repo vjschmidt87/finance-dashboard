@@ -1,0 +1,18 @@
+<div class="chart-container" *ngIf="chartData.length > 0">
+  <ngx-charts-pie-chart
+    [results]="chartData"
+    [scheme]="colorScheme"
+    [legend]="true"
+    [legendTitle]="'Categories'"
+    [legendPosition]="legendPosition"
+    [labels]="true"
+    [doughnut]="true"
+    [arcWidth]="0.45"
+    [tooltipDisabled]="false"
+    [animations]="true">
+  </ngx-charts-pie-chart>
+</div>
+
+<div class="empty-chart" *ngIf="chartData.length === 0">
+  <p>No expense data available for this period.</p>
+</div>

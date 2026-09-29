@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.angular/
+.git/
+.gitignore
+.idea/
+.vscode/
+*.md
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+coverage/
+e2e/

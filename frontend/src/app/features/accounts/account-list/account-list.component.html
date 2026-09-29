@@ -1,0 +1,161 @@
+<div class="accounts-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Accounts</h1>
+      <p class="text-secondary" *ngIf="!isLoading && accounts.length > 0">
+        Total Balance:
+        <span class="total-balance">{{ getTotalBalance() | currency:'USD':'symbol':'1.2-2' }}</span>
+      </p>
+    </div>
+    <button class="btn-primary" (click)="toggleForm()">
+      <svg *ngIf="!showForm" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <svg *ngIf="showForm" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+      {{ showForm ? 'Cancel' : 'Add Account' }}
+    </button>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-banner" *ngIf="errorMessage">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    {{ errorMessage }}
+    <button class="error-dismiss" (click)="errorMessage = ''">&times;</button>
+  </div>
+
+  <!-- Add Account Form -->
+  <div class="card add-account-form" *ngIf="showForm">
+    <h3>New Account</h3>
+    <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name">Account Name</label>
+          <input id="name" type="text" formControlName="name" placeholder="e.g. Main Checking">
+          <div class="form-error" *ngIf="accountForm.get('name')?.touched && accountForm.get('name')?.hasError('required')">
+            Account name is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="type">Account Type</label>
+          <select id="type" formControlName="type">
+            <option *ngFor="let t of accountTypes" [value]="t.value">{{ t.label }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="balance">Initial Balance</label>
+          <input id="balance" type="number" formControlName="balance" step="0.01" min="0">
+          <div class="form-error" *ngIf="accountForm.get('balance')?.touched && accountForm.get('balance')?.hasError('min')">
+            Balance must be zero or greater.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="currency">Currency</label>
+          <select id="currency" formControlName="currency">
+            <option value="USD">USD - US Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="BRL">BRL - Brazilian Real</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="toggleForm()">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="accountForm.invalid">Create Account</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state card" *ngIf="!isLoading && accounts.length === 0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+      <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+      <line x1="2" y1="10" x2="22" y2="10"></line>
+    </svg>
+    <h3>No accounts yet</h3>
+    <p class="text-secondary">Create your first account to start tracking your finances.</p>
+    <button class="btn-primary" (click)="toggleForm()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Add Account
+    </button>
+  </div>
+
+  <!-- Account Cards Grid -->
+  <div class="accounts-grid" *ngIf="!isLoading && accounts.length > 0">
+    <div class="card account-card" *ngFor="let account of accounts; trackBy: trackByAccount" [routerLink]="['/accounts', account.id]">
+      <div class="account-card-header">
+        <div class="account-icon" [ngClass]="'icon-' + account.type.toLowerCase()">
+          <!-- Bank / Checking -->
+          <svg *ngIf="getAccountTypeIcon(account.type) === 'bank'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="22" x2="21" y2="22"></line>
+            <line x1="6" y1="18" x2="6" y2="11"></line>
+            <line x1="10" y1="18" x2="10" y2="11"></line>
+            <line x1="14" y1="18" x2="14" y2="11"></line>
+            <line x1="18" y1="18" x2="18" y2="11"></line>
+            <polygon points="12 2 20 7 4 7"></polygon>
+          </svg>
+          <!-- Piggy Bank / Savings -->
+          <svg *ngIf="getAccountTypeIcon(account.type) === 'piggy-bank'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          <!-- Credit Card -->
+          <svg *ngIf="getAccountTypeIcon(account.type) === 'credit-card'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          <!-- Chart Line / Investment -->
+          <svg *ngIf="getAccountTypeIcon(account.type) === 'chart-line'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          <!-- Wallet / Cash -->
+          <svg *ngIf="getAccountTypeIcon(account.type) === 'wallet'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path>
+            <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path>
+            <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"></path>
+          </svg>
+        </div>
+        <button class="delete-btn" (click)="deleteAccount(account.id, $event)" title="Delete account">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="account-card-body">
+        <h3 class="account-name">{{ account.name }}</h3>
+        <span class="account-type-badge" [ngClass]="'badge-' + account.type.toLowerCase()">
+          {{ account.type.replace('_', ' ') }}
+        </span>
+      </div>
+      <div class="account-card-footer">
+        <span class="account-balance" [ngClass]="{'text-danger': account.balance < 0}">
+          {{ account.balance | currency:account.currency:'symbol':'1.2-2' }}
+        </span>
+        <span class="account-currency">{{ account.currency }}</span>
+      </div>
+    </div>
+  </div>
+</div>

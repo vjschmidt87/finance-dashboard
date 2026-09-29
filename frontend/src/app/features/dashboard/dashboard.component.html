@@ -1,0 +1,140 @@
+<div class="dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <div class="period-selector">
+      <select [(ngModel)]="selectedMonth" (ngModelChange)="onPeriodChange()">
+        <option *ngFor="let m of months" [ngValue]="m.value">{{ m.label }}</option>
+      </select>
+      <select [(ngModel)]="selectedYear" (ngModelChange)="onPeriodChange()">
+        <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="error-banner">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span>{{ errorMessage }}</span>
+    <button class="btn btn-sm btn-secondary" (click)="onPeriodChange()">Retry</button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <ng-container *ngIf="dashboardData && !isLoading">
+    <!-- Stat Cards Row -->
+    <div class="stats-row">
+      <app-stat-card
+        title="Total Balance"
+        [value]="dashboardData.totalBalance"
+        prefix="$"
+        [trend]="dashboardData.totalBalance >= 0 ? 'up' : 'down'"
+        color="var(--primary)">
+      </app-stat-card>
+      <app-stat-card
+        title="Monthly Income"
+        [value]="dashboardData.monthlyIncome"
+        prefix="$"
+        trend="up"
+        color="var(--success)">
+      </app-stat-card>
+      <app-stat-card
+        title="Monthly Expenses"
+        [value]="dashboardData.monthlyExpenses"
+        prefix="$"
+        trend="down"
+        color="var(--danger)">
+      </app-stat-card>
+      <app-stat-card
+        title="Savings Rate"
+        [value]="dashboardData.savingsRate"
+        suffix="%"
+        [trend]="dashboardData.savingsRate >= 20 ? 'up' : 'down'"
+        color="#e8710a">
+      </app-stat-card>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-row">
+      <div class="card chart-card">
+        <h2 class="card-title">Expenses by Category</h2>
+        <app-category-breakdown-chart
+          [data]="dashboardData.categoryBreakdown">
+        </app-category-breakdown-chart>
+      </div>
+      <div class="card chart-card">
+        <h2 class="card-title">Monthly Trend</h2>
+        <app-monthly-trend-chart
+          [data]="dashboardData.monthlyTrend">
+        </app-monthly-trend-chart>
+      </div>
+    </div>
+
+    <!-- Budget & Transactions Row -->
+    <div class="bottom-row">
+      <div class="card budget-card">
+        <div class="card-header">
+          <h2 class="card-title">Budget Progress</h2>
+          <a routerLink="/budgets" class="view-all-link">View all</a>
+        </div>
+        <app-budget-progress
+          [budgets]="dashboardData.budgetProgress">
+        </app-budget-progress>
+      </div>
+
+      <div class="card transactions-card">
+        <div class="card-header">
+          <h2 class="card-title">Recent Transactions</h2>
+          <a routerLink="/transactions" class="view-all-link">View all</a>
+        </div>
+        <div class="transactions-table-wrapper">
+          <table *ngIf="dashboardData.recentTransactions.length > 0">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th class="hide-mobile">Category</th>
+                <th class="hide-mobile">Date</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tx of dashboardData.recentTransactions; trackBy: trackByTransaction">
+                <td>
+                  <div class="tx-description">{{ tx.description }}</div>
+                  <div class="tx-account text-secondary show-mobile-inline">{{ tx.accountName }}</div>
+                </td>
+                <td class="hide-mobile">
+                  <span class="badge" [ngClass]="{
+                    'badge-income': tx.type === 'INCOME',
+                    'badge-expense': tx.type === 'EXPENSE',
+                    'badge-transfer': tx.type === 'TRANSFER'
+                  }">{{ tx.categoryName }}</span>
+                </td>
+                <td class="hide-mobile">{{ tx.date | date:'MMM d' }}</td>
+                <td class="text-right" [ngClass]="{
+                  'text-success': tx.type === 'INCOME',
+                  'text-danger': tx.type === 'EXPENSE'
+                }">
+                  <span *ngIf="tx.type === 'INCOME'">+</span>
+                  <span *ngIf="tx.type === 'EXPENSE'">-</span>
+                  ${{ tx.amount | number:'1.2-2' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="dashboardData.recentTransactions.length === 0" class="empty-state">
+            <p class="text-secondary">No recent transactions found.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

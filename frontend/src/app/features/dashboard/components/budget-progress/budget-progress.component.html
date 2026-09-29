@@ -1,0 +1,37 @@
+<div class="budget-list" *ngIf="budgets.length > 0">
+  <div class="budget-item" *ngFor="let budget of budgets; trackBy: trackByBudget">
+    <div class="budget-header">
+      <div class="budget-info">
+        <span class="budget-name">{{ budget.name }}</span>
+        <span class="budget-category">{{ budget.categoryName }}</span>
+      </div>
+      <div class="budget-amounts">
+        <span class="budget-spent">${{ budget.spentAmount | number:'1.2-2' }}</span>
+        <span class="budget-separator">/</span>
+        <span class="budget-limit">${{ budget.limitAmount | number:'1.2-2' }}</span>
+      </div>
+    </div>
+    <div class="progress-bar-track">
+      <div
+        class="progress-bar-fill"
+        [style.width]="getProgressWidth(budget.percentUsed)"
+        [style.background-color]="getProgressColor(budget.percentUsed)">
+      </div>
+    </div>
+    <div class="budget-footer">
+      <span class="budget-percent" [style.color]="getProgressColor(budget.percentUsed)">
+        {{ budget.percentUsed | number:'1.0-0' }}% used
+      </span>
+      <span class="budget-remaining" *ngIf="budget.remainingAmount >= 0">
+        ${{ budget.remainingAmount | number:'1.2-2' }} remaining
+      </span>
+      <span class="budget-remaining over-budget" *ngIf="budget.remainingAmount < 0">
+        ${{ (-budget.remainingAmount) | number:'1.2-2' }} over budget
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="empty-budgets" *ngIf="budgets.length === 0">
+  <p>No budgets set for this period.</p>
+</div>

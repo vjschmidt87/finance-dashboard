@@ -1,0 +1,45 @@
+@use '../../../../../styles/variables' as v;
+@use '../../../../../styles/mixins' as m;
+
+.chart-container {
+  flex: 1;
+  @include m.flex-center;
+  min-height: 280px;
+
+  ::ng-deep {
+    .ngx-charts {
+      text {
+        fill: v.$text-secondary !important;
+        font-family: v.$font-family !important;
+        font-size: v.$font-size-xs !important;
+      }
+    }
+
+    .legend-wrap {
+      .legend-labels {
+        background: transparent !important;
+      }
+
+      .legend-label-text {
+        font-family: v.$font-family !important;
+        font-size: 0.8125rem !important;
+        color: v.$text-primary !important;
+      }
+    }
+
+    .pie-label {
+      font-size: 0.6875rem !important;
+    }
+  }
+}
+
+.empty-chart {
+  flex: 1;
+  @include m.flex-center;
+  min-height: 280px;
+
+  p {
+    color: v.$text-secondary;
+    font-size: 0.9375rem;
+  }
+}

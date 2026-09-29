@@ -1,0 +1,90 @@
+@use '../../../../styles/variables' as v;
+@use '../../../../styles/mixins' as m;
+
+.form-page {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 32px;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 560px;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: v.$text-primary;
+  margin: 0 0 24px;
+}
+
+// Error banner
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: rgba(v.$danger, 0.08);
+  border: 1px solid rgba(v.$danger, 0.2);
+  border-radius: v.$radius-sm;
+  color: v.$danger;
+  margin-bottom: 24px;
+  font-size: 0.9375rem;
+
+  span {
+    flex: 1;
+  }
+}
+
+// Input error state
+.input-error {
+  border-color: v.$danger !important;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(v.$danger, 0.15) !important;
+  }
+}
+
+// Form row for side-by-side fields
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+// Form actions
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+// Loading spinner inside button
+.btn-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner-icon {
+  animation: spin 1s linear infinite;
+}
+
+.spinner-circle {
+  stroke: v.$bg-surface;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive
+@media (max-width: 540px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

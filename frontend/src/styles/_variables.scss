@@ -1,0 +1,88 @@
+// ============================================
+// Finance Dashboard - Design Tokens
+// ============================================
+
+// === Colors - Primary ===
+$primary: #1a73e8;
+$primary-dark: #1557b0;
+$primary-light: #e8f0fe;
+
+// === Colors - Semantic ===
+$success: #34a853;
+$success-light: rgba(52, 168, 83, 0.1);
+$danger: #ea4335;
+$danger-light: rgba(234, 67, 53, 0.1);
+$warning: #fbbc04;
+$warning-light: rgba(251, 188, 4, 0.1);
+
+// === Colors - Backgrounds ===
+$bg-body: #f8f9fa;
+$bg-surface: #ffffff;
+$bg-hover: #f1f3f4;
+
+// === Colors - Text ===
+$text-primary: #202124;
+$text-secondary: #5f6368;
+$text-light: #80868b;
+
+// === Colors - Border ===
+$border-color: #dadce0;
+
+// === Spacing Scale ===
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 12px;
+$space-lg: 16px;
+$space-xl: 24px;
+$space-xxl: 32px;
+$space-xxxl: 48px;
+
+// === Typography ===
+$font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-size-xs: 0.75rem;      // 12px
+$font-size-sm: 0.8125rem;    // 13px
+$font-size-base: 0.9375rem;  // 15px
+$font-size-md: 1rem;         // 16px
+$font-size-lg: 1.0625rem;    // 17px
+$font-size-xl: 1.25rem;      // 20px
+$font-size-xxl: 1.5rem;      // 24px
+$font-size-display: 1.75rem; // 28px
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// === Border Radius ===
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-round: 50%;
+
+// === Shadows ===
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+// === Transitions ===
+$transition-fast: 0.15s ease;
+$transition-base: 0.2s ease;
+$transition-slow: 0.3s ease;
+
+// === Breakpoints ===
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// === Layout ===
+$sidebar-width: 260px;
+$container-max-width: 1200px;
+$container-padding: 24px;
+
+// === Scrollbar ===
+$scrollbar-width: 6px;
+$scrollbar-track: transparent;
+$scrollbar-thumb: $border-color;
